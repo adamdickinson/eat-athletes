@@ -9,15 +9,22 @@
     "serve": "preact build && preact serve",
     "dev": "preact watch",
     "lint": "eslint src",
-    "test": "jest ./tests"
+    "test": "jest ./tests",
+    "relay": "relay-compiler --src ./src --schema ./schema.graphql",
+    "relay:watch": "relay-compiler --src ./src --schema ./schema.graphql --watch"
   },
   "eslintConfig": {
-    "extends": "eslint-config-synacor"
+    "extends": "eslint-config-synacor",
+    "rules": {
+      "indent": ["error", 2],
+      "semi": [2, "never"] 
+    }
   },
   "eslintIgnore": [
     "build/*"
   ],
   "devDependencies": {
+    "babel-plugin-relay": "^1.5.0",
     "eslint": "^4.9.0",
     "eslint-config-synacor": "^2.0.2",
     "identity-obj-proxy": "^3.0.0",
@@ -25,22 +32,28 @@
     "jest": "^21.2.1",
     "preact-cli": "^2.1.0",
     "preact-render-spy": "^1.2.1",
+    "relay-compiler": "^1.5.0",
     "style-loader": "^0.20.2",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2"
   },
   "dependencies": {
-    "apollo-boost": "^0.1.1",
-    "apollo-client": "^2.2.5",
     "classnames": "^2.2.5",
     "graphql": "^0.13.1",
+    "lodash": "^4.17.5",
     "moment": "^2.20.1",
     "preact": "^8.2.6",
     "preact-compat": "^3.17.0",
+    "preact-redux": "^2.0.3",
     "preact-render-to-string": "^3.7.0",
     "preact-router": "^2.5.7",
     "progressbar.js": "^1.0.1",
-    "react-apollo": "^2.0.4"
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-material-icon-svg": "^1.4.0",
+    "react-relay": "^1.5.0",
+    "react-sound": "^1.1.0",
+    "redux": "^3.7.2"
   },
   "jest": {
     "verbose": true,

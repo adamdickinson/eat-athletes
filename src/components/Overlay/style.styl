@@ -1,0 +1,63 @@
+.overlay
+  align-items center
+  background url(../../assets/background.jpg) 50% 50% no-repeat
+  background-size cover
+  display flex
+  flex-direction column
+  height 100%
+  justify-content center
+  left 0
+  position fixed
+  top 0
+  width 100%
+  z-index 10
+
+  input
+    background #fff
+    border none
+    color #1A1A1A
+    display block
+    font-size 20px
+    height 50px
+    line-height 1
+    outline none
+    padding 15px 30px
+    text-align center
+    width 100%
+
+    &:-moz-placeholder, &::-moz-placeholder, &::-webkit-input-placeholder, &:-ms-input-placeholder, &:input-placeholder
+      color #AEB0B4
+
+    &::-webkit-input-placeholder
+      -webkit-user-modify: read-write-plaintext-only;
+
+    &:input-placeholder
+      -webkit-user-modify: read-write-plaintext-only;
+
+.results
+  font-size 20px
+  line-height 1
+  list-style none
+  margin 1em 0 0
+  padding 0
+
+  li
+    height 64px
+    padding 22px 30px
+    cursor pointer
+    
+    &:hover
+      background rgba(#FFF, 0.3) 
+
+  li + li
+    border-top 1px solid rgba(#FFF, 0.3)
+
+.searching
+  font-size 20px
+  font-weight 300
+  color rgba(#FFF, 0.3)
+
+.wrap
+  max-width 480px
+  text-align center
+  width 100%
