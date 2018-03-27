@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 2313cdde33fbf7758c32cf641a22f40b
+ * @relayHash 5de1507d25585ec7fc8268401ce6d2f2
  */
 
 /* eslint-disable */
@@ -13,10 +13,11 @@ export type AddGroupOverlaySearchQueryVariables = {|
   query: string,
 |};
 export type AddGroupOverlaySearchQueryResponse = {|
-  +findGroups: $ReadOnlyArray<{|
+  +searchGroups: $ReadOnlyArray<{|
+    +id: string,
     +name: string,
-    +athletes: ?$ReadOnlyArray<?{|
-      +_id: string,
+    +athletes: $ReadOnlyArray<{|
+      +id: string,
       +firstName: string,
       +lastName: string,
       +photoUrl: ?string,
@@ -30,10 +31,11 @@ export type AddGroupOverlaySearchQueryResponse = {|
 query AddGroupOverlaySearchQuery(
   $query: String!
 ) {
-  findGroups(query: $query) {
+  searchGroups(query: $query) {
+    id
     name
     athletes {
-      _id
+      id
       firstName
       lastName
       photoUrl
@@ -51,11 +53,18 @@ var v0 = [
     "defaultValue": null
   }
 ],
-v1 = [
+v1 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "id",
+  "args": null,
+  "storageKey": null
+},
+v2 = [
   {
     "kind": "LinkedField",
     "alias": null,
-    "name": "findGroups",
+    "name": "searchGroups",
     "storageKey": null,
     "args": [
       {
@@ -68,6 +77,7 @@ v1 = [
     "concreteType": "Group",
     "plural": true,
     "selections": [
+      v1,
       {
         "kind": "ScalarField",
         "alias": null,
@@ -84,13 +94,7 @@ v1 = [
         "concreteType": "Athlete",
         "plural": true,
         "selections": [
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "name": "_id",
-            "args": null,
-            "storageKey": null
-          },
+          v1,
           {
             "kind": "ScalarField",
             "alias": null,
@@ -122,7 +126,7 @@ return {
   "operationKind": "query",
   "name": "AddGroupOverlaySearchQuery",
   "id": null,
-  "text": "query AddGroupOverlaySearchQuery(\n  $query: String!\n) {\n  findGroups(query: $query) {\n    name\n    athletes {\n      _id\n      firstName\n      lastName\n      photoUrl\n    }\n  }\n}\n",
+  "text": "query AddGroupOverlaySearchQuery(\n  $query: String!\n) {\n  searchGroups(query: $query) {\n    id\n    name\n    athletes {\n      id\n      firstName\n      lastName\n      photoUrl\n    }\n  }\n}\n",
   "metadata": {},
   "fragment": {
     "kind": "Fragment",
@@ -130,15 +134,15 @@ return {
     "type": "Query",
     "metadata": null,
     "argumentDefinitions": v0,
-    "selections": v1
+    "selections": v2
   },
   "operation": {
     "kind": "Operation",
     "name": "AddGroupOverlaySearchQuery",
     "argumentDefinitions": v0,
-    "selections": v1
+    "selections": v2
   }
 };
 })();
-(node/*: any*/).hash = 'b181543836bacd6f3f363a2e9ec1b31a';
+(node/*: any*/).hash = '1b718fffa579674ac0aa5e688d6d404e';
 module.exports = node;

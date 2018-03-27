@@ -1,5 +1,7 @@
+import Button from "../../components/Button"
 import Overlay from "../../components/Overlay"
 import debounce from "lodash/debounce"
+import gradients from "../../config/gradients"
 import overlayStyle from "../../components/Overlay/style.styl"
 import relayEnvironment from "../../config/relay"
 import { Component } from "preact"
@@ -42,8 +44,8 @@ export class AddParticipantOverlay extends Component {
             environment={relayEnvironment}
             query={graphql`
               query AddParticipantOverlaySearchQuery($query: String!) {
-                findAthletes(query: $query) {
-                  _id
+                searchAthletes(query: $query) {
+                  id
                   firstName
                   lastName
                   photoUrl
@@ -53,20 +55,26 @@ export class AddParticipantOverlay extends Component {
             variables={{ query: this.state.query }}
             render={ ({ error, props }) => {
               if( error ) return null // @TODO(adam): handle
-              else if( props && props.findAthletes.length ) {
+              else if( props && props.searchAthletes.length ) {
                 return (
                   <ul class={overlayStyle.results}>
-                    { props.findAthletes.map(athlete => <li key={athlete._id} onClick={() => onSelectAthlete(athlete)}>{athlete.firstName} {athlete.lastName}</li>) }
+                    { props.searchAthletes.map(athlete => <li key={athlete.id} onClick={() => onSelectAthlete(athlete)}>{athlete.firstName} {athlete.lastName}</li>) }
                   </ul>
                 )
               }
-              else if( props && !props.findAthletes.length )
+              else if( props && !props.searchAthletes.length )
                 return <p class={overlayStyle.searching}>No results found</p>
 
               return <p class={overlayStyle.searching}>Searching...</p>
             } }
           />
         ) }
+
+        <div style={{ marginTop: "20px" }}>
+          <Button onClick={() => this.props.onClose()}>Cancel</Button>
+          <Button onClick={() => this.props.onOpen("create-athlete")} gradient={gradients.good}>Create Athlete</Button>
+        </div>
+
       </Overlay>
     )
   }
@@ -76,6 +84,8 @@ export class AddParticipantOverlay extends Component {
 
 
 export const mapDispatchToProps = dispatch => ({
+  onClose:  ()      => dispatch({ type: "CLOSE_OVERLAYS" }),
+  onOpen:   overlay => dispatch({ type: "OPEN_OVERLAY", overlay }),
   onSelect: athlete => dispatch({ type: "ADD_PARTICIPANT", newParticipant: athlete }),
 })
 

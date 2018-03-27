@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash bbb7b71997959b8d40b49bebf5264b00
+ * @relayHash 78f67af1b5fd36452e4e05cdf72f0c28
  */
 
 /* eslint-disable */
@@ -13,8 +13,8 @@ export type AddParticipantOverlaySearchQueryVariables = {|
   query: string,
 |};
 export type AddParticipantOverlaySearchQueryResponse = {|
-  +findAthletes: $ReadOnlyArray<{|
-    +_id: string,
+  +searchAthletes: $ReadOnlyArray<{|
+    +id: string,
     +firstName: string,
     +lastName: string,
     +photoUrl: ?string,
@@ -27,8 +27,8 @@ export type AddParticipantOverlaySearchQueryResponse = {|
 query AddParticipantOverlaySearchQuery(
   $query: String!
 ) {
-  findAthletes(query: $query) {
-    _id
+  searchAthletes(query: $query) {
+    id
     firstName
     lastName
     photoUrl
@@ -49,7 +49,7 @@ v1 = [
   {
     "kind": "LinkedField",
     "alias": null,
-    "name": "findAthletes",
+    "name": "searchAthletes",
     "storageKey": null,
     "args": [
       {
@@ -65,7 +65,7 @@ v1 = [
       {
         "kind": "ScalarField",
         "alias": null,
-        "name": "_id",
+        "name": "id",
         "args": null,
         "storageKey": null
       },
@@ -98,7 +98,7 @@ return {
   "operationKind": "query",
   "name": "AddParticipantOverlaySearchQuery",
   "id": null,
-  "text": "query AddParticipantOverlaySearchQuery(\n  $query: String!\n) {\n  findAthletes(query: $query) {\n    _id\n    firstName\n    lastName\n    photoUrl\n  }\n}\n",
+  "text": "query AddParticipantOverlaySearchQuery(\n  $query: String!\n) {\n  searchAthletes(query: $query) {\n    id\n    firstName\n    lastName\n    photoUrl\n  }\n}\n",
   "metadata": {},
   "fragment": {
     "kind": "Fragment",
@@ -116,5 +116,5 @@ return {
   }
 };
 })();
-(node/*: any*/).hash = 'caf6e8087c126474e933433d70451653';
+(node/*: any*/).hash = 'f77982dfe4948117e287d387c5bfb99a';
 module.exports = node;

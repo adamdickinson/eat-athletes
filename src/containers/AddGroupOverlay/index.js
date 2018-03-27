@@ -1,3 +1,4 @@
+import Button from "../../components/Button"
 import Overlay from "../../components/Overlay"
 import debounce from "lodash/debounce"
 import overlayStyle from "../../components/Overlay/style.styl"
@@ -5,6 +6,7 @@ import relayEnvironment from "../../config/relay"
 import { Component } from "preact"
 import { graphql, QueryRenderer } from "react-relay"
 import { connect } from "preact-redux"
+import gradients from "../../config/gradients"
 
 
 
@@ -31,6 +33,7 @@ export class AddGroupOverlay extends Component {
     return (
       <Overlay>
         <h1>Add Group</h1>
+
         <input 
           className="search" 
           onInput={this.updateQuery} 
@@ -42,11 +45,11 @@ export class AddGroupOverlay extends Component {
             environment={relayEnvironment}
             query={graphql`
               query AddGroupOverlaySearchQuery($query: String!) {
-                findGroups(query: $query) {
-                  _id
+                searchGroups(query: $query) {
+                  id
                   name
                   athletes {
-                    _id
+                    id
                     firstName
                     lastName
                     photoUrl
@@ -57,14 +60,14 @@ export class AddGroupOverlay extends Component {
             variables={{ query: this.state.query }}
             render={ ({ error, props }) => {
               if( error ) return null // @TODO(adam): handle
-              else if( props && props.findGroups.length ) {
+              else if( props && props.searchGroups.length ) {
                 return (
                   <ul class={overlayStyle.results}>
-                    { props.findGroups.map(group => <li key={group._id} onClick={() => onSelectGroup(group)}>{group.name}</li>) }
+                    { props.searchGroups.map(group => <li key={group.id} onClick={() => onSelectGroup(group)}>{group.name}</li>) }
                   </ul>
                 )
               }
-              else if( props && !props.findGroups.length )
+              else if( props && !props.searchGroups.length )
                 return <p class={overlayStyle.searching}>No results found</p>
 
 
@@ -72,6 +75,12 @@ export class AddGroupOverlay extends Component {
             } }
           />
         ) }
+
+        <div style={{ marginTop: "20px" }}>
+          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={() => this.props.onOpen("create-group")} gradient={gradients.good}>Create Group</Button>
+        </div>
+
       </Overlay>
     )
   }
@@ -81,7 +90,10 @@ export class AddGroupOverlay extends Component {
 
 
 export const mapDispatchToProps = dispatch => ({
-  onSelect: group => dispatch({ type: "ADD_PARTICIPANTS", newParticipants: group.athletes }),
+  onClose:     ()      => dispatch({ type: "CLOSE_OVERLAYS" }),
+  onOpen:      overlay => dispatch({ type: "OPEN_OVERLAY", overlay }),
+  onSelect:    group   => dispatch({ type: "ADD_PARTICIPANTS", newParticipants: group.athletes }),
+  openOverlay: overlay => dispatch({ type: "OPEN_OVERLAY", overlay }),
 })
 
 

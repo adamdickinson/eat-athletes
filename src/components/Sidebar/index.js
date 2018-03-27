@@ -6,7 +6,7 @@ import PropTypes from "prop-types"
 
 
 
-export const Sidebar = ({ profile }) => (
+export const Sidebar = ({ profile, tests }) => (
   <div class={style.sidebar}>
     <div style={{ height: "70px", background: "#263740", marginBottom: "-70px" }} />
     <Profile 
@@ -14,24 +14,8 @@ export const Sidebar = ({ profile }) => (
       subtext={profile.position}
       photoUrl={profile.photoUrl}
     />
-    <NavBar userType={profile.__typename} />
+    <NavBar tests={tests} userType={profile.__typename} />
   </div>
-)
-
-
-
-const container = createFragmentContainer(Sidebar,
-  graphql`
-    fragment Sidebar_profile on CurrentUserResult {
-      ... on User {
-        __typename
-        firstName
-        lastName
-        photoUrl
-        position
-      }
-    }
-  `
 )
 
 
@@ -48,4 +32,27 @@ Sidebar.propTypes = ({
 
 
 
-export default container
+export default createFragmentContainer(Sidebar,
+  graphql`
+    fragment Sidebar_profile on CurrentUserResult {
+      ... on User {
+        __typename
+        firstName
+        lastName
+      }
+      ... on Coach {
+        photoUrl
+        position
+      }
+      ... on Athlete {
+        photoUrl
+        position
+      }
+    }
+    fragment Sidebar_tests on Test @relay(plural: true) {
+      id
+      name
+      variation
+    }
+  `
+)

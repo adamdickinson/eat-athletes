@@ -1,207 +1,290 @@
-interface User {
-  _id:       ID!
-  _rev:      String!
-  firstName: String!
-  lastName:  String!
-  photoUrl:  String
-  position:  String
+schema {
+  query: Query
+  mutation: Mutation
 }
 
-type Athlete implements User {
-  _id:            ID!
-  _rev:           String!
-  age:            Int!
-  dateOfBirth:    String!
-  firstName:      String!
-  graduatingYear: Int!
-  groups:         [Group]!
-  lastName:       String!
-  photoUrl:       String
-  position:       String
+type Query {
+  group(id: ID!): Group!
+  groups: [Group!]!
+  searchGroups(query: String!): [Group!]!
+  hello: String!
+  measurementResult(id: ID!): MeasurementResult
+  shootingResult(id: ID!): ShootingResult
+  splitResult(id: ID!): SplitResult
+  stageShuttleResult(id: ID!): StageShuttleResult
+  timeResult(id: ID!): TimeResult
+  test(id: ID!): Test
+  tests: [Test!]!
+  currentUser: CurrentUserResult
+  allAthletesReports: [AthleteReport!]!
+  athlete(id: String!): Athlete
+  athletes: [Athlete!]!
+  searchAthletes(query: String!): [Athlete!]!
+  coach(id: String!): Coach
+  searchCoaches(query: String!): [Coach!]!
+  guest(id: String!): Guest
+  searchGuests(query: String!): [Guest!]!
 }
 
-type Coach implements User {
-  _id:       ID!
-  _rev:      String!
-  firstName: String!
-  lastName:  String!
-  photoUrl:  String
-  position:  String
-}
-
-type Guest implements User {
-  _id:       ID!
-  _rev:      String!
-  firstName: String!
-  lastName:  String!
-  photoUrl:  String
-  position:  String
-}
-
-type Measurement {
-  _id:             ID!
-  _rev:            String!
-  athlete:         Athlete!
-  date:            String!
-  height:          Float!
-  heightWithShoes: Float!
-  weight:          Float!
-  wingspan:        Float!
-  standingReach:   Float!
-  bodyFat:         Float!
-  handLength:      Float!
-  handWidth:       Float!
+type Mutation {
+  createGroup(group: GroupInput!): Group!
+  deleteGroup(id: ID!): Boolean!
+  updateGroup(id: ID!, group: GroupInput!): Group!
+  addAthleteToGroup(athlete: ID!, group: ID!): Group!
+  removeAthleteFromGroup(athlete: ID!, group: ID!): Group!
+  recordMeasurementResult(result: MeasurementResultInput!): MeasurementResult!
+  recordMeasurementResults(results: [MeasurementResultInput!]!): [MeasurementResult!]!
+  recordShootingResult(result: ShootingResultInput!): ShootingResult!
+  recordSplitResult(result: SplitResultInput!): SplitResult!
+  recordStageShuttleResult(result: StageShuttleResultInput!): StageShuttleResult!
+  recordStageShuttleResults(results: [StageShuttleResultInput!]!): [StageShuttleResult!]!
+  recordTimeResult(result: TimeResultInput!): TimeResult!
+  recordTimeResults(results: [TimeResultInput!]!): [TimeResult!]!
+  createAthlete(athlete: AthleteInput): Athlete!
+  deleteAthlete(id: ID!): Athlete!
+  restoreAthlete(id: ID!): Athlete!
+  updateAthlete(id: ID!, athlete: AthleteInput): Athlete!
+  createCoach(coach: CoachInput): Coach!
+  deleteCoach(id: ID!): Coach!
+  restoreCoach(id: ID!): Coach!
+  updateCoach(id: ID!, coach: CoachInput): Coach!
+  createGuest(guest: GuestInput): Guest!
+  deleteGuest(id: ID!): Guest!
+  restoreGuest(id: ID!): Guest!
+  updateGuest(id: ID!, guest: GuestInput): Guest!
 }
 
 type Group {
-  _id:      ID!
-  _rev:     String!
-  name:     String!
-  athletes: [Athlete]
+  id: ID!
+  name: String!
+  athletes: [Athlete!]!
 }
-
-type Result {
-  _id:     ID!
-  _rev:    String!
-  value:   Float!
-  athlete: Athlete!
-  date:    String!
-  test:    Test!
-  variation: String
-}
-
-type ShootingResult {
-  _id:        ID!
-  _rev:       String!
-  athlete:    Athlete!
-  attempts:   [ShootingAttempt]
-  date:       String!
-  test:       Test!
-  variation: String
-}
-
-type ShootingAttempt {
-  _id:  ID!
-  _rev: String!
-  made: Boolean!
-  time: Int
-}
-
-type Test {
-  _id:        ID!
-  _rev:       String!
-  name:       String!
-  variations: [TestVariation!]! 
-  maxResult:  Float
-  minResult:  Float
-  duration:   Float
-  distance:   Float
-  groupTest:  Boolean!
-}
-
-type TestVariation {
-  name:       String!
-  maxResult:  Float
-  minResult:  Float
-  duration:   Float
-  distance:   Float
-  groupTest:  Boolean
-}
-
-type TestMetric {
-  _id:        ID!
-  _rev:       String!
-  goodResult: Float!
-  badResult:  Float!
-  test:       Test!
-  gradeYear:  Int
-  group:      Group
-}
-
-
-union CurrentUserResult = Athlete | Coach | Guest 
-
-
-type Query {
-  coach(id:String!): Coach
-  currentUser: CurrentUserResult
-  findAthletes(query: String!): [Athlete!]!
-  findGroups(query: String!): [Group!]!
-  hello: String!
-  test(name: String!): Test
-}
-
-
-
-input AthleteInput {
-  dateOfBirth:    String!
-  firstName:      String!
-  graduatingYear: Int!
-  lastName:       String!
-  photoUrl:       String
-  position:       String
-}
-
-
 
 input GroupInput {
   name: String!
 }
 
-
-
-input ResultInput {
-  value:     Float!
-  athlete:   ID!
-  date:      String!
-  test:      String!
-  variation: String
+interface Result {
+  id: ID!
+  athlete: Athlete!
+  date: String!
+  test: Test!
 }
 
+type MeasurementResult implements Result {
+  id: ID!
+  athlete: Athlete!
+  date: String!
+  test: Test!
+  specId: String!
+  value: Float!
+}
 
+input MeasurementResultInput {
+  athlete: ID!
+  date: String!
+  test: ID!
+  specId: String!
+  value: Float!
+}
+
+type ShootingResult implements Result {
+  id: ID!
+  athlete: Athlete!
+  date: String!
+  test: Test!
+  attempts: [ShootingAttempt!]!
+}
+
+type ShootingAttempt {
+  id: ID!
+  made: Boolean!
+  time: Float
+}
+
+input ShootingResultInput {
+  athlete: ID!
+  date: String!
+  test: ID!
+  attempts: [ShootingAttemptInput!]!
+}
 
 input ShootingAttemptInput {
   made: Boolean!
-  time: Int
+  time: Float
 }
 
-
-
-input ShootingResultInput {
-  athlete:    String!
-  attempts:   [ShootingAttemptInput]
-  date:       String!
-  test:       String!
-  variation:  String
+type SplitResult implements Result {
+  id: ID!
+  athlete: Athlete!
+  date: String!
+  test: Test!
+  splits: [Float!]!
 }
 
-
-
-input MeasurementInput {
-  athlete:         ID!
-  bodyFat:         Float!
-  date:            String!
-  handLength:      Float!
-  handWidth:       Float!
-  height:          Float!
-  heightWithShoes: Float!
-  standingReach:   Float!
-  weight:          Float!
-  wingspan:        Float!
+input SplitResultInput {
+  athlete: ID!
+  date: String!
+  test: ID!
+  splits: [Float!]!
 }
 
+type StageShuttleResult implements Result {
+  id: ID!
+  athlete: Athlete!
+  date: String!
+  test: Test!
+  stage: Int!
+  shuttle: Int!
+}
 
+input StageShuttleResultInput {
+  athlete: ID!
+  date: String!
+  test: ID!
+  stage: Int!
+  shuttle: Int!
+}
 
-type Mutation {
-  addAthleteToGroup(athlete: ID!, group: ID!): Group
-  removeAthleteFromGroup(athlete: ID!, group: ID!): Group
-  createAthlete(athlete: AthleteInput): Athlete
-  updateAthlete(_id: ID!, athlete: AthleteInput): Athlete
-  createGroup(group: GroupInput!): Group
-  updateGroup(_id: ID!, group: GroupInput!): Group
-  recordMeasurement(measurement: MeasurementInput!): Measurement
-  recordResult(result: ResultInput): Result
-  recordResults(results: [ResultInput!]!): [Result]
-  recordShootingResult(result: ShootingResultInput): ShootingResult
-  recordShootingResults(results: [ShootingResultInput!]!): [ShootingResult]
+type TimeResult implements Result {
+  id: ID!
+  athlete: Athlete!
+  date: String!
+  test: Test!
+  time: Float!
+}
+
+input TimeResultInput {
+  athlete: ID!
+  date: String!
+  test: ID!
+  time: Float!
+}
+
+enum TestLimitMetric {
+  TIME
+  DISTANCE
+}
+
+enum TestSpecMetric {
+  M_YD
+  M_FT
+  CM_IN
+  CM_FT
+  KG_LB
+  PERCENTAGE
+}
+
+enum ResultType {
+  STAGE_SHUTTLE
+  SHOTS
+  MEASUREMENTS
+  TIME
+  SPLIT
+}
+
+type Test {
+  id: ID!
+  name: String!
+  variation: String
+  limit: TestLimit
+  resultType: ResultType!
+  groupTest: Boolean!
+  specs: [TestSpec!]
+}
+
+type TestLimit {
+  metric: TestLimitMetric!
+  value: Float!
+}
+
+type TestSpec {
+  id: ID!
+  name: String!
+  metric: TestSpecMetric!
+}
+
+type TestContext {
+  id: ID!
+  goodResult: Float!
+  badResult: Float!
+  test: Test!
+  gradeYear: Int
+  group: Group
+}
+
+interface User {
+  id: ID!
+  firstName: String!
+  lastName: String!
+}
+
+union CurrentUserResult = Athlete | Coach | Guest
+
+type Athlete implements User {
+  id: ID!
+  age: Int!
+  dateOfBirth: String!
+  firstName: String!
+  graduatingYear: Int!
+  groups: [Group]!
+  lastName: String!
+  photoUrl: String
+  position: String
+}
+
+type AthleteReport {
+  athlete: Athlete!
+  results: AthleteResults!
+}
+
+type AthleteResults {
+  beep: String
+  agility: String
+  speed: String
+  standingVerticalLeap: String
+  maxVerticalLeap: String
+  height: String
+  heightWithShoes: String
+  weight: String
+  wingspan: String
+  standingReach: String
+  bodyFat: String
+  handLength: String
+  handWidth: String
+}
+
+input AthleteInput {
+  dateOfBirth: String!
+  firstName: String!
+  graduatingYear: Int!
+  lastName: String!
+  photoUrl: String
+  position: String
+}
+
+type Coach implements User {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  photoUrl: String
+  position: String
+}
+
+input CoachInput {
+  firstName: String!
+  lastName: String!
+  photoUrl: String
+  position: String
+}
+
+type Guest implements User {
+  id: ID!
+  firstName: String!
+  lastName: String!
+}
+
+input GuestInput {
+  firstName: String!
+  lastName: String!
 }

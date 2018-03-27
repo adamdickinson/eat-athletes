@@ -1,24 +1,15 @@
-import AgilityTest from "../routes/AgilityTest"
-import BeepTest from "../routes/BeepTest"
-import BodyTest from "../routes/BodyTest"
+import AthleteGrouping from "../containers/AthleteGrouping"
 import Header from "./Header"
-import Portfolio from "../routes/Portfolio"
-import ShootingTest from "../routes/ShootingTest"
+import Overlays from "../containers/Overlays"
 import Sidebar from "./Sidebar"
-import SpeedTest from "../routes/SpeedTest"
+import Test from "../containers/Test"
 import relayEnvironment from "../config/relay"
 import store from "../config/redux"
+import uniqBy from "lodash/uniqBy"
+import { Component } from "preact"
 import { Provider } from "preact-redux"
 import { Router } from "preact-router"
 import { graphql, QueryRenderer } from "react-relay"
-import { Component } from "preact"
-
-
-
-const BlankTest = () => null
-const BallTest = BlankTest
-const LeapTest = BlankTest
-
 
 
 if( module.hot ) require("preact/debug")
@@ -37,10 +28,26 @@ export class App extends Component {
             query={graphql`
               query AppQuery {
                 currentUser {
-                  ... on User {
-                    __typename
-                  }
+                  __typename
                   ...Sidebar_profile
+                }
+
+                tests {
+                  id
+                  name
+                  variation
+                  specs {
+                    id
+                    name
+                    metric
+                  }
+                  limit {
+                    metric
+                    value
+                  }
+                  resultType
+                  groupTest
+                  ...Sidebar_tests
                 }
               }
             `}
@@ -51,28 +58,24 @@ export class App extends Component {
 
               return (
                 <div style={{ display: "flex", height: "100%" }}>
-                  <Sidebar profile={props.currentUser} />
-                  { props.currentUser.__typename == "Athlete" && (
-                    <Router onChange={this.handleRoute}>
-                      <Portfolio path="/" />
-                    </Router>
-                  ) }
-
+                  <Sidebar profile={props.currentUser} tests={props.tests} />
                   { props.currentUser.__typename == "Coach" && (
                     <Router onChange={this.handleRoute}>
-                      <BeepTest path="/test/beep" />
-                      <SpeedTest path="/test/speed" />
-                      <AgilityTest path="/test/agility" />
-                      <BodyTest path="/test/body" />
-                      <ShootingTest path="/test/shooting" />
-                      <BallTest path="/test/ball" />
-                      <LeapTest path="/test/leap" />
+                      { props.tests.map(test => (
+                        <Test 
+                          key={test.id} 
+                          path={`/test/${test.id.split(":", 2)[1]}`} 
+                          {...test} 
+                        />
+                      ) ) }
+                      <AthleteGrouping path="/groups" />
                     </Router>
                   ) }
                 </div>
               )
             }}
           />
+          <Overlays />
         </div>
       </Provider>
     )

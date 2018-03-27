@@ -10,11 +10,12 @@ import PropTypes from "prop-types"
 export class ShotTracker extends Component {
 
   render({ disabled }) {
+    const shotActive = this.state.shotTime !== undefined 
     return (
       <div 
         class={style["shot-tracker"]} 
       >
-        { !this.state.shotTime && (
+        { !shotActive && (
           <div class={style.wrap}>
             <button 
               disabled={disabled}
@@ -29,7 +30,7 @@ export class ShotTracker extends Component {
           </div>
         ) }
 
-        { this.state.shotTime && (
+        { !!shotActive && (
           <div class={style.wrap}>
             <button 
               class={style.button}
@@ -60,20 +61,20 @@ export class ShotTracker extends Component {
 
   shotMade() {
     this.props.onShot({ time: this.state.shotTime, made: true })
-    this.setState({ shotTime: null })
+    this.setState({ shotTime: undefined })
   }
 
 
 
   shotMissed() {
     this.props.onShot({ time: this.state.shotTime, made: false })
-    this.setState({ shotTime: null })
+    this.setState({ shotTime: undefined })
   }
 
 
 
   shotTaken() {
-    this.setState({ shotTime: Date.now() })
+    this.setState({ shotTime: this.props.timer ? this.props.timer.time : null })
   }
 
 }

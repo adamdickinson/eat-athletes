@@ -21,7 +21,24 @@ export type Sidebar_profile = {|
 */
 
 
-const node/*: ConcreteFragment*/ = {
+const node/*: ConcreteFragment*/ = (function(){
+var v0 = [
+  {
+    "kind": "ScalarField",
+    "alias": null,
+    "name": "photoUrl",
+    "args": null,
+    "storageKey": null
+  },
+  {
+    "kind": "ScalarField",
+    "alias": null,
+    "name": "position",
+    "args": null,
+    "storageKey": null
+  }
+];
+return {
   "kind": "Fragment",
   "name": "Sidebar_profile",
   "type": "CurrentUserResult",
@@ -50,20 +67,17 @@ const node/*: ConcreteFragment*/ = {
       "storageKey": null
     },
     {
-      "kind": "ScalarField",
-      "alias": null,
-      "name": "photoUrl",
-      "args": null,
-      "storageKey": null
+      "kind": "InlineFragment",
+      "type": "Athlete",
+      "selections": v0
     },
     {
-      "kind": "ScalarField",
-      "alias": null,
-      "name": "position",
-      "args": null,
-      "storageKey": null
+      "kind": "InlineFragment",
+      "type": "Coach",
+      "selections": v0
     }
   ]
 };
-(node/*: any*/).hash = '057954affec86e2e1ec5e8a681d300ef';
+})();
+(node/*: any*/).hash = '35ad4ffd4ed9e3e692e8885d67865f0c';
 module.exports = node;

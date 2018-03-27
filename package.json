@@ -10,14 +10,13 @@
     "dev": "preact watch",
     "lint": "eslint src",
     "test": "jest ./tests",
-    "relay": "relay-compiler --src ./src --schema ./schema.graphql",
-    "relay:watch": "relay-compiler --src ./src --schema ./schema.graphql --watch",
+    "relay": "node src/update-schema.js && relay-compiler --src ./src --schema ./schema.graphql",
+    "relay:watch": "node src/update-schema.js && relay-compiler --src ./src --schema ./schema.graphql --watch",
     "backend:start": "start-tracker-backend",
     "backend:stop": "stop-tracker-backend"
   },
   "eslintConfig": {
-    "rules": {
-    }
+    "rules": {}
   },
   "eslintIgnore": [
     "build/*"
@@ -37,9 +36,14 @@
     "stylus-loader": "^3.0.2"
   },
   "dependencies": {
+    "@elevated/tracker-backend": "file:/data/tracker-backend/",
+    "@renegade/react-fields": "https://github.com/adamdickinson/react-fields.git#v1.1.0",
     "classnames": "^2.2.5",
+    "downloadjs": "^1.4.7",
     "graphql": "^0.13.1",
     "lodash": "^4.17.5",
+    "lokka": "^1.7.0",
+    "lokka-transport-http": "^1.6.1",
     "moment": "^2.20.1",
     "preact": "^8.2.6",
     "preact-compat": "^3.17.0",
@@ -52,7 +56,9 @@
     "react-material-icon-svg": "^1.4.0",
     "react-relay": "^1.5.0",
     "react-sound": "^1.1.0",
-    "redux": "^3.7.2"
+    "redux": "^3.7.2",
+    "redux-saga": "^0.16.0",
+    "xlsx-populate": "^1.14.0"
   },
   "jest": {
     "verbose": true,
