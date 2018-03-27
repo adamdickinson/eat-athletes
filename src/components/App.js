@@ -1,17 +1,17 @@
 import AgilityTest from "../routes/AgilityTest"
 import BeepTest from "../routes/BeepTest"
 import BodyTest from "../routes/BodyTest"
-import Header from './Header'
-import Portfolio from '../routes/Portfolio'
+import Header from "./Header"
+import Portfolio from "../routes/Portfolio"
 import ShootingTest from "../routes/ShootingTest"
-import Sidebar from './Sidebar'
+import Sidebar from "./Sidebar"
 import SpeedTest from "../routes/SpeedTest"
 import relayEnvironment from "../config/relay"
 import store from "../config/redux"
 import { Provider } from "preact-redux"
-import { Router } from 'preact-router'
-import { graphql, QueryRenderer } from 'react-relay'
-import { h, Component } from 'preact'
+import { Router } from "preact-router"
+import { graphql, QueryRenderer } from "react-relay"
+import { Component } from "preact"
 
 
 
@@ -21,7 +21,7 @@ const LeapTest = BlankTest
 
 
 
-if( module.hot ) require('preact/debug')
+if( module.hot ) require("preact/debug")
 
 
 

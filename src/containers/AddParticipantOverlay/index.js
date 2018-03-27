@@ -3,7 +3,7 @@ import debounce from "lodash/debounce"
 import overlayStyle from "../../components/Overlay/style.styl"
 import relayEnvironment from "../../config/relay"
 import { Component } from "preact"
-import { graphql, QueryRenderer } from 'react-relay'
+import { graphql, QueryRenderer } from "react-relay"
 import { connect } from "preact-redux"
 
 
@@ -56,7 +56,7 @@ export class AddParticipantOverlay extends Component {
               else if( props && props.findAthletes.length ) {
                 return (
                   <ul class={overlayStyle.results}>
-                    { props.findAthletes.map(athlete => <li onClick={() => onSelectAthlete(athlete)}>{athlete.firstName} {athlete.lastName}</li>) }
+                    { props.findAthletes.map(athlete => <li key={athlete._id} onClick={() => onSelectAthlete(athlete)}>{athlete.firstName} {athlete.lastName}</li>) }
                   </ul>
                 )
               }
@@ -66,7 +66,7 @@ export class AddParticipantOverlay extends Component {
               return <p class={overlayStyle.searching}>Searching...</p>
             } }
           />
-      ) }
+        ) }
       </Overlay>
     )
   }

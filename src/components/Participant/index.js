@@ -1,6 +1,6 @@
+import PropTypes from "prop-types"
 import avatar from "../../assets/avatar.png"
 import style from "./style.styl"
-import { h } from 'preact'
 
 
 
@@ -16,6 +16,17 @@ export const Participant = ({ disabled, title, onClick, photoUrl, subtext, badge
     </p>
   </div>
 )
+
+
+
+Participant.propTypes = ({
+  badge:       PropTypes.node,
+  disabled:    PropTypes.bool,
+  onClick:     PropTypes.func,
+  photoUrl:    PropTypes.string,
+  subtext:     PropTypes.string,
+  title:       PropTypes.string.isRequired
+})
 
 
 

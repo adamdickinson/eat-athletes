@@ -1,6 +1,6 @@
-import { h } from "preact"
-import { Link } from "preact-router/match"
+import PropTypes from "prop-types"
 import style from "./style.styl"
+import { Link } from "preact-router/match"
 
 
 
@@ -33,6 +33,12 @@ export const NavBar = ({ userType }) => {
     </nav>
   )
 }
+
+
+
+NavBar.propTypes = ({
+  userType: PropTypes.string
+})
 
 
 

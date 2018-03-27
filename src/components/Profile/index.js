@@ -1,6 +1,6 @@
+import PropTypes from "prop-types"
 import avatar from "../../assets/avatar.png"
 import style from "./style.styl"
-import { h } from 'preact'
 
 
 
@@ -15,6 +15,15 @@ export const Profile = ({ title, description, photoUrl, subtext }) => (
     </p>
   </div>
 )
+
+
+
+Profile.propTypes = ({
+  description: PropTypes.string,
+  photoUrl:    PropTypes.string,
+  subtext:     PropTypes.string,
+  title:       PropTypes.string.isRequired
+})
 
 
 

@@ -1,3 +1,4 @@
+import PropTypes from "prop-types"
 import range from "lodash/range"
 import style from "./style.styl"
 
@@ -9,6 +10,13 @@ export const ProgressBar = ({ progress, stages }) => (
     { range(stages || 1).map(s => <div key={s} class={style["progress-bar-stage"]} />) }
   </div>
 )
+
+
+
+ProgressBar.propTypes = ({
+  progress: PropTypes.float,
+  stages:   PropTypes.int
+})
 
 
 

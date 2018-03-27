@@ -1,25 +1,20 @@
-import AccountMultiplePlusIcon from "react-material-icon-svg/dist/AccountMultiplePlusIcon"
-import AccountPlusIcon from "react-material-icon-svg/dist/AccountPlusIcon"
 import ActionBar from "../../components/ActionBar"
 import ActionBarButton from "../../components/ActionBarButton"
 import ActionBarSpace from "../../components/ActionBarSpace"
-import AddGroupOverlay from "../../containers/AddGroupOverlay"
-import AddParticipantOverlay from "../../containers/AddParticipantOverlay"
-import Button from "../../components/Button"
 import CheckIcon from "react-material-icon-svg/dist/CheckIcon"
 import CloseIcon from "react-material-icon-svg/dist/CloseIcon"
 import Column from "../../components/Column"
 import ContentCell from "../../components/ContentCell"
 import Participant from "../../components/Participant"
-import ProgressBar from "../../components/ProgressBar"
+import ParticipantActionBar from "../../containers/ParticipantActionBar"
+import PropTypes from "prop-types"
 import Result from "../../components/Result"
-import range from "lodash/range"
 import relayEnvironment from "../../config/relay"
-import style from './style.styl'
-import uniqBy from "lodash/uniqBy"
-import { Component } from 'preact'
+import style from "./style.styl"
+import { Component } from "preact"
 import { commitMutation } from "react-relay"
 import { connect } from "preact-redux"
+import { graphql } from "react-relay"
 
 
 
@@ -36,10 +31,10 @@ export class BodyTest extends Component {
 
 
 
-	render({ participants }) {
+  render({ participants }) {
     const metricStyle = { display: "inline-block", width: "30px" }
     const badge = () => <span style={{ backgroundImage: "linear-gradient(to right, #00AB9D, #2AA167)", display: "block", padding: "4px" }}><CheckIcon style={{ display: "block" }} fill="#FFF" /></span>
-		return (
+    return (
       <div class={style["body-test"]}>
 
         <Column>
@@ -56,22 +51,10 @@ export class BodyTest extends Component {
               />
             )) }
           </ContentCell>
+
           <ActionBar>
             <ActionBarSpace fill />
-            <ActionBarButton 
-              icon={<AccountPlusIcon fill="white" />}
-              onClick={() => this.openOverlay("add-participant")} 
-            >
-              Add Participant
-            </ActionBarButton>
-
-            <ActionBarButton 
-              icon={<AccountMultiplePlusIcon fill="white" />}
-              onClick={() => this.openOverlay("add-group")} 
-            >
-              Add Group 
-            </ActionBarButton>
-
+            <ParticipantActionBar disabled={this.state.running} />
           </ActionBar>
         </Column>
 
@@ -98,29 +81,14 @@ export class BodyTest extends Component {
             ) }
           </Column>
         ) }
-
-        { this.state.overlay == "add-participant" && <AddParticipantOverlay onClose={() => this.closeOverlays()} /> }
-        { this.state.overlay == "add-group" && <AddGroupOverlay onClose={() => this.closeOverlays()} /> }
       </div>
     )
-	}
+  }
 
 
 
   clearMeasurements() {
     this.setState({ measurement: {}, participant: undefined })
-  }
-
-
-
-  closeOverlays() {
-    this.setState({ overlay: null })
-  }
-
-
-
-  openOverlay(overlay) {
-    this.setState({ overlay })
   }
 
 
@@ -181,6 +149,12 @@ export class BodyTest extends Component {
   }
 
 }
+
+
+
+BodyTest.propTypes = ({
+  participants: PropTypes.array.isRequired
+})
 
 
 

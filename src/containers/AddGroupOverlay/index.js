@@ -3,7 +3,7 @@ import debounce from "lodash/debounce"
 import overlayStyle from "../../components/Overlay/style.styl"
 import relayEnvironment from "../../config/relay"
 import { Component } from "preact"
-import { graphql, QueryRenderer } from 'react-relay'
+import { graphql, QueryRenderer } from "react-relay"
 import { connect } from "preact-redux"
 
 
@@ -43,6 +43,7 @@ export class AddGroupOverlay extends Component {
             query={graphql`
               query AddGroupOverlaySearchQuery($query: String!) {
                 findGroups(query: $query) {
+                  _id
                   name
                   athletes {
                     _id
@@ -59,7 +60,7 @@ export class AddGroupOverlay extends Component {
               else if( props && props.findGroups.length ) {
                 return (
                   <ul class={overlayStyle.results}>
-                    { props.findGroups.map(group => <li onClick={() => onSelectGroup(group)}>{group.name}</li>) }
+                    { props.findGroups.map(group => <li key={group._id} onClick={() => onSelectGroup(group)}>{group.name}</li>) }
                   </ul>
                 )
               }
@@ -70,7 +71,7 @@ export class AddGroupOverlay extends Component {
               return <p class={overlayStyle.searching}>Searching...</p>
             } }
           />
-      ) }
+        ) }
       </Overlay>
     )
   }

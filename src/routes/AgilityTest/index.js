@@ -2,7 +2,6 @@ import ActionBar from "../../components/ActionBar"
 import ActionBarButton from "../../components/ActionBarButton"
 import ActionBarInput from "../../components/ActionBarInput"
 import ActionBarSpace from "../../components/ActionBarSpace"
-import CachedIcon from "react-material-icon-svg/dist/CachedIcon"
 import CheckIcon from "react-material-icon-svg/dist/CheckIcon"
 import CloseIcon from "react-material-icon-svg/dist/CloseIcon"
 import Column from "../../components/Column"
@@ -11,17 +10,14 @@ import Participant from "../../components/Participant"
 import ParticipantActionBar from "../../containers/ParticipantActionBar"
 import PlayIcon from "react-material-icon-svg/dist/PlayIcon"
 import ProgressBar from "../../components/ProgressBar"
+import PropTypes from "prop-types"
 import Result from "../../components/Result"
 import StopIcon from "react-material-icon-svg/dist/StopIcon"
 import gradients from "../../config/gradients"
-import range from "lodash/range"
 import relayEnvironment from "../../config/relay"
-import style from './style.styl'
-import uniqBy from "lodash/uniqBy"
-import { Component } from 'preact'
-import { LineStat } from "../../components/LineStat"
-import { actions } from "../../config/redux"
-import { commitMutation } from "react-relay"
+import style from "./style.styl"
+import { Component } from "preact"
+import { commitMutation, graphql } from "react-relay"
 import { connect } from "preact-redux"
 
 
@@ -46,7 +42,7 @@ export class AgilityTest extends Component {
 
 
 
-	render({ clearParticipants, participants }) {
+  render({ participants }) {
     const compareProgress = (participantA, participantB) => {
       const results = this.state.results
       const hasResultDiff = (participantA._id in results ? 1 : 0) - (participantB._id in results ? 1 : 0)
@@ -56,13 +52,13 @@ export class AgilityTest extends Component {
     }
 
 
-		return (
+    return (
       <div class={style["agility-test"]}>
 
         <Column>
           <ContentCell title="Participants" fill style={{ margin: "20px" }}>
-            { !this.props.participants.length && "Add participants using the buttons below" }
-            { this.props.participants.map((participant, a) => (
+            { !participants.length && "Add participants using the buttons below" }
+            { participants.map((participant, a) => (
               <Participant
                 key={a}
                 photoUrl={participant.photoUrl} 
@@ -87,7 +83,7 @@ export class AgilityTest extends Component {
 
             <ActionBarSpace fill>
               <ActionBarInput readonly value={Math.floor(this.state.time / 1000)}>Seconds</ActionBarInput>
-              <span style={{ fontFamily: '"DJB Friday Night Lights", monospace', fontSize: 32 }}>:</span>
+              <span style={{ fontFamily: "\"DJB Friday Night Lights\", monospace", fontSize: 32 }}>:</span>
               <ActionBarInput readonly value={(this.state.time % 1000).toString().padStart(3, "0")}>Milliseconds</ActionBarInput>
             </ActionBarSpace>
 
@@ -96,11 +92,11 @@ export class AgilityTest extends Component {
           <ProgressBar progress={this.state.time / this.state.duration} stages={21} />
         </Column>
 
-        { !!this.props.participants.length && (
+        { !!participants.length && (
           <Column width="360px">
             <div style={{ flex: "1 1 auto" }}>
               <ContentCell title="Leaderboard">
-                { [...this.props.participants].sort(compareProgress).map((participant, a) => {
+                { [...participants].sort(compareProgress).map((participant, a) => {
                   const time = participant._id in this.state.results ? this.state.results[participant._id] : 0
                   const label = time ? ((time / 1000).toFixed(3) + "s") : "not started"
                   const progress = time / this.state.duration 
@@ -133,7 +129,7 @@ export class AgilityTest extends Component {
 
       </div>
     )
-	}
+  }
 
 
 
@@ -203,6 +199,12 @@ export class AgilityTest extends Component {
   }
 
 }
+
+
+
+AgilityTest.propTypes = ({
+  participants: PropTypes.array.isRequired
+})
 
 
 

@@ -1,6 +1,6 @@
-import style from "./style.styl"
-import { h } from "preact"
+import PropTypes from "prop-types"
 import cx from "classnames"
+import style from "./style.styl"
 
 
 
@@ -16,6 +16,20 @@ export const Result = ({ children, disabled, gradient, onClick, progress, right 
     </div>
   )
 }
+
+
+
+Result.propTypes = ({
+  children: PropTypes.node,
+  disabled: PropTypes.bool,
+  gradient: PropTypes.shape({
+    from: PropTypes.string.isRequired,
+    to:   PropTypes.string.isRequired,
+  }),
+  onClick:  PropTypes.func,
+  progress: PropTypes.float,
+  right:    PropTypes.node
+})
 
 
 

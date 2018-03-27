@@ -1,32 +1,26 @@
-import AccountMultiplePlusIcon from "react-material-icon-svg/dist/AccountMultiplePlusIcon"
-import AccountPlusIcon from "react-material-icon-svg/dist/AccountPlusIcon"
 import ActionBar from "../../components/ActionBar"
 import ActionBarButton from "../../components/ActionBarButton"
 import ActionBarInput from "../../components/ActionBarInput"
 import ActionBarSelect from "../../components/ActionBarSelect"
 import ActionBarSpace from "../../components/ActionBarSpace"
-import AddGroupOverlay from "../../containers/AddGroupOverlay"
-import AddParticipantOverlay from "../../containers/AddParticipantOverlay"
 import Button from "../../components/Button"
-import CachedIcon from "react-material-icon-svg/dist/CachedIcon"
 import CheckIcon from "react-material-icon-svg/dist/CheckIcon"
 import CloseIcon from "react-material-icon-svg/dist/CloseIcon"
 import Column from "../../components/Column"
 import ContentCell from "../../components/ContentCell"
 import Participant from "../../components/Participant"
+import ParticipantActionBar from "../../containers/ParticipantActionBar"
 import PlayIcon from "react-material-icon-svg/dist/PlayIcon"
 import ProgressBar from "../../components/ProgressBar"
+import PropTypes from "prop-types"
 import Result from "../../components/Result"
 import ShotTracker from "../../components/ShotTracker"
 import StopIcon from "react-material-icon-svg/dist/StopIcon"
-import range from "lodash/range"
 import relayEnvironment from "../../config/relay"
-import style from './style.styl'
-import uniqBy from "lodash/uniqBy"
-import { Component } from 'preact'
-import { LineStat } from "../../components/LineStat"
+import style from "./style.styl"
+import { Component } from "preact"
+import { commitMutation, graphql, QueryRenderer } from "react-relay"
 import { connect } from "preact-redux"
-import { commitMutation, graphql, QueryRenderer } from 'react-relay'
 
 
 
@@ -46,11 +40,11 @@ export class ShootingTest extends Component {
 
 
 
-	render({ participants }) {
+  render({ participants }) {
     const madeLabel = <span><CheckIcon style={{ marginRight: "8px" }} fill="#15A682" /> Shot made</span>
     const missedLabel = <span><CloseIcon style={{ marginRight: "8px" }} fill="#F0285D" /> Shot missed</span>
 
-		return (
+    return (
       <div class={style["shooting-test"]}>
 
         <Column>
@@ -122,7 +116,7 @@ export class ShootingTest extends Component {
                           Seconds
                         </ActionBarInput>
 
-                        <span style={{ fontFamily: '"DJB Friday Night Lights", monospace', fontSize: 32 }}>:</span>
+                        <span style={{ fontFamily: "\"DJB Friday Night Lights\", monospace", fontSize: 32 }}>:</span>
 
                         <ActionBarInput 
                           readonly 
@@ -139,22 +133,7 @@ export class ShootingTest extends Component {
               }}
             />
 
-            <ActionBarButton 
-              disabled={this.state.running}
-              icon={<AccountPlusIcon fill="white" />}
-              onClick={() => this.openOverlay("add-participant")} 
-            >
-              Add Participant
-            </ActionBarButton>
-
-            <ActionBarButton 
-              disabled={this.state.running}
-              icon={<AccountMultiplePlusIcon fill="white" />}
-              onClick={() => this.openOverlay("add-group")} 
-            >
-              Add Group 
-            </ActionBarButton>
-
+            <ParticipantActionBar disabled={this.state.running} />
           </ActionBar>
           <ProgressBar progress={(this.state.duration - this.state.time) / this.state.duration} stages={this.state.duration / 1000} />
         </Column>
@@ -188,12 +167,9 @@ export class ShootingTest extends Component {
             ) }
           </Column>
         ) }
-
-        { this.state.overlay == "add-participant" && <AddParticipantOverlay onClose={() => this.closeOverlays()} /> }
-        { this.state.overlay == "add-group" && <AddGroupOverlay onClose={() => this.closeOverlays()} /> }
       </div>
     )
-	}
+  }
 
 
   
@@ -205,18 +181,6 @@ export class ShootingTest extends Component {
 
   clearResults() {
     this.setState({ saved: false, shots: [] })
-  }
-
-
-
-  closeOverlays() {
-    this.setState({ overlay: null })
-  }
-
-
-
-  openOverlay(overlay) {
-    this.setState({ overlay })
   }
 
 
@@ -295,6 +259,12 @@ export class ShootingTest extends Component {
   }
 
 }
+
+
+
+ShootingTest.propTypes = ({
+  participants: PropTypes.array.isRequired
+})
 
 
 

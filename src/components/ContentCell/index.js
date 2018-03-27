@@ -1,4 +1,4 @@
-import { h } from "preact"
+import PropTypes from "prop-types"
 import styles from "./style.styl"
 
 
@@ -11,6 +11,16 @@ export const ContentCell = ({ children, fill, title, style }) => (
     </div>
   </div>
 )
+
+
+
+
+ContentCell.propTypes = ({
+  children: PropTypes.node,
+  fill:     PropTypes.string,
+  style:    PropTypes.object,
+  title:    PropTypes.string
+})
 
 
 

@@ -1,0 +1,39 @@
+env:
+  browser: true
+  commonjs: true
+  es6: true
+  jest: true
+extends: 
+  - 'eslint:recommended'
+  - 'plugin:react/recommended'
+globals:
+  mockStore: true
+  mount: true
+  shallow: true
+  itCreatesAction: true
+  process: true
+parserOptions:
+  ecmaVersion: 8
+  ecmaFeatures:
+    experimentalObjectRestSpread: true
+    jsx: true
+  sourceType: module
+plugins:
+  - react
+rules:
+  react/no-unknown-property:
+    - off
+  react/react-in-jsx-scope:
+    - off
+  indent:
+    - error
+    - 2
+  linebreak-style:
+    - error
+    - unix
+  quotes:
+    - error
+    - double
+  semi:
+    - error
+    - never

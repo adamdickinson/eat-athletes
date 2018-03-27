@@ -1,17 +1,15 @@
 import Column from "../../components/Column"
 import ContentCell from "../../components/ContentCell"
-import relayEnvironment from "../../config/relay"
-import style from './style.styl'
+import style from "./style.styl"
 import { CircleStat } from "../../components/CircleStat"
 import { LineStat } from "../../components/LineStat"
-import { graphql, QueryRenderer } from 'react-relay'
-import { h, Component } from 'preact'
+import { Component } from "preact"
 
 
 
 export default class Portfolio extends Component {
 
-	render({ student }) {
+  render() {
 
     const PortfolioLineStat = ({ color, ...props }) => {
       const gradients = {
@@ -52,7 +50,7 @@ export default class Portfolio extends Component {
       )
     }
 
-		return (
+    return (
       <div class={style.portfolio}>
 
         <Column>
@@ -122,6 +120,6 @@ export default class Portfolio extends Component {
 
       </div>
     )
-	}
+  }
 
 }

@@ -3,6 +3,7 @@ import style from "./style.styl"
 import PlusIcon from "react-material-icon-svg/dist/PlusIcon"
 import CloseIcon from "react-material-icon-svg/dist/CloseIcon"
 import CheckIcon from "react-material-icon-svg/dist/CheckIcon"
+import PropTypes from "prop-types"
 
 
 
@@ -76,6 +77,13 @@ export class ShotTracker extends Component {
   }
 
 }
+
+
+
+ShotTracker.propTypes = ({
+  disabled: PropTypes.bool,
+  onShot: PropTypes.func.isRequired
+})
 
 
 

@@ -1,31 +1,25 @@
-import AccountMultiplePlusIcon from "react-material-icon-svg/dist/AccountMultiplePlusIcon"
-import AccountPlusIcon from "react-material-icon-svg/dist/AccountPlusIcon"
 import ActionBar from "../../components/ActionBar"
 import ActionBarButton from "../../components/ActionBarButton"
 import ActionBarInput from "../../components/ActionBarInput"
 import ActionBarSpace from "../../components/ActionBarSpace"
-import AddGroupOverlay from "../../containers/AddGroupOverlay"
-import AddParticipantOverlay from "../../containers/AddParticipantOverlay"
-import CachedIcon from "react-material-icon-svg/dist/CachedIcon"
 import CheckIcon from "react-material-icon-svg/dist/CheckIcon"
 import CloseIcon from "react-material-icon-svg/dist/CloseIcon"
 import Column from "../../components/Column"
 import ContentCell from "../../components/ContentCell"
 import Participant from "../../components/Participant"
+import ParticipantActionBar from "../../containers/ParticipantActionBar"
 import PlayIcon from "react-material-icon-svg/dist/PlayIcon"
 import ProgressBar from "../../components/ProgressBar"
+import PropTypes from "prop-types"
 import Result from "../../components/Result"
 import Sound from "react-sound"
 import StopIcon from "react-material-icon-svg/dist/StopIcon"
 import beepTestAudio from "../../assets/beep-test.mp3"
 import gradients from "../../config/gradients"
-import range from "lodash/range"
 import relayEnvironment from "../../config/relay"
-import style from './style.styl'
-import uniqBy from "lodash/uniqBy"
-import { Component } from 'preact'
-import { LineStat } from "../../components/LineStat"
-import { commitMutation } from "react-relay"
+import style from "./style.styl"
+import { Component } from "preact"
+import { commitMutation, graphql } from "react-relay"
 import { connect } from "preact-redux"
 import { start as startBeepTest, getProgress as getBeepTestProgress } from "../../helpers/beepTest"
 
@@ -49,8 +43,7 @@ export class BeepTest extends Component {
 
 
 
-	render({ participants }) {
-    const currentStageLabel = this.state.currentStage.stage + "." + this.state.currentStage.shuttle
+  render({ participants }) {
     const currentStageProgress = getBeepTestProgress(this.state.currentStage.stage, this.state.currentStage.shuttle)
 
     const getParticipantStage = participant =>
@@ -80,7 +73,7 @@ export class BeepTest extends Component {
         .localeCompare(`${participantB.firstName} ${participantB.lastName}`)
     }
 
-		return (
+    return (
       <div class={style["beep-test"]}>
 
         <Column>
@@ -102,26 +95,11 @@ export class BeepTest extends Component {
             { !!this.state.running && <ActionBarButton onClick={() => this.stop()} icon={<StopIcon fill="white" />}>Stop Test</ActionBarButton> }
             <ActionBarSpace fill>
               <ActionBarInput readonly value={this.state.currentStage.stage}>Stage</ActionBarInput>
-              <span style={{ fontFamily: '"DJB Friday Night Lights", monospace', fontSize: 32 }}>:</span>
+              <span style={{ fontFamily: "\"DJB Friday Night Lights\", monospace", fontSize: 32 }}>:</span>
               <ActionBarInput readonly value={this.state.currentStage.shuttle}>Shuttle</ActionBarInput>
             </ActionBarSpace>
 
-            <ActionBarButton 
-              disabled={this.state.running}
-              icon={<AccountPlusIcon fill="white" />}
-              onClick={() => this.openOverlay("add-participant")} 
-            >
-              Add Participant
-            </ActionBarButton>
-
-            <ActionBarButton 
-              disabled={this.state.running}
-              icon={<AccountMultiplePlusIcon fill="white" />}
-              onClick={() => this.openOverlay("add-group")} 
-            >
-              Add Group 
-            </ActionBarButton>
-
+            <ParticipantActionBar disabled={this.state.running} />
           </ActionBar>
           <ProgressBar progress={currentStageProgress} stages={21} />
 
@@ -158,29 +136,14 @@ export class BeepTest extends Component {
             </ActionBar>
           ) }
         </Column>
-
-        { this.state.overlay == "add-participant" && <AddParticipantOverlay onClose={() => this.closeOverlays()} /> }
-        { this.state.overlay == "add-group" && <AddGroupOverlay onClose={() => this.closeOverlays()} /> }
       </div>
     )
-	}
+  }
 
 
 
   clearResults() {
     this.setState({ results: {}, saved: false })
-  }
-
-
-
-  closeOverlays() {
-    this.setState({ overlay: null })
-  }
-
-
-
-  openOverlay(overlay) {
-    this.setState({ overlay })
   }
 
 
@@ -231,7 +194,7 @@ export class BeepTest extends Component {
   stop() {
     const results = { ...this.state.results }
     if( this.state.currentStage.stage )
-       this.props.participants 
+      this.props.participants 
         .map(participant => participant._id)
         .filter(id => !(id in this.state.results))
         .forEach(id => results[id] = { ...this.state.currentStage })
@@ -241,6 +204,12 @@ export class BeepTest extends Component {
   }
 
 }
+
+
+
+BeepTest.propTypes = ({
+  participants: PropTypes.array.isRequired
+})
 
 
 

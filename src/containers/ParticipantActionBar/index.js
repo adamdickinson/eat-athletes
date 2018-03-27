@@ -1,11 +1,11 @@
 import AccountMultiplePlusIcon from "react-material-icon-svg/dist/AccountMultiplePlusIcon"
 import AccountPlusIcon from "react-material-icon-svg/dist/AccountPlusIcon"
 import ActionBarButton from "../../components/ActionBarButton"
-import ActionBarInput from "../../components/ActionBarInput"
 import ActionBarSpace from "../../components/ActionBarSpace"
 import AddGroupOverlay from "../../containers/AddGroupOverlay"
 import AddParticipantOverlay from "../../containers/AddParticipantOverlay"
 import MinusIcon from "react-material-icon-svg/dist/MinusIcon"
+import PropTypes from "prop-types"
 import { Component } from "preact"
 import { actions } from "../../config/redux"
 import { connect } from "preact-redux"
@@ -62,6 +62,13 @@ export class ParticipantActionBar extends Component {
 
 
 }
+
+
+
+ParticipantActionBar.propTypes = ({
+  clearParticipants: PropTypes.func.isRequired,
+  participants: PropTypes.array.isRequired
+})
 
 
 

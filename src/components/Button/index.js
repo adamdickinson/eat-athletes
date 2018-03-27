@@ -1,5 +1,7 @@
+import PropTypes from "prop-types"
 import styles from "./style.styl"
 import cx from "classnames"
+
 
 
 export const Button = ({ children, color, gradient, icon, outlined, onClick, style }) => {
@@ -16,6 +18,21 @@ export const Button = ({ children, color, gradient, icon, outlined, onClick, sty
     </button>
   )
 }
+
+
+
+Button.propTypes = ({
+  children: PropTypes.node,
+  color:    PropTypes.string,
+  gradient: PropTypes.shape({
+    from: PropTypes.string.isRequired,
+    to:   PropTypes.string.isRequired,
+  }),
+  icon:     PropTypes.node,
+  outlined: PropTypes.bool,
+  onClick:  PropTypes.func,
+  style:    PropTypes.object
+})
 
 
 

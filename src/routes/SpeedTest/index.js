@@ -1,30 +1,24 @@
-import AccountMultiplePlusIcon from "react-material-icon-svg/dist/AccountMultiplePlusIcon"
-import AccountPlusIcon from "react-material-icon-svg/dist/AccountPlusIcon"
 import ActionBar from "../../components/ActionBar"
 import ActionBarButton from "../../components/ActionBarButton"
 import ActionBarInput from "../../components/ActionBarInput"
 import ActionBarSpace from "../../components/ActionBarSpace"
-import AddGroupOverlay from "../../containers/AddGroupOverlay"
-import AddParticipantOverlay from "../../containers/AddParticipantOverlay"
-import CachedIcon from "react-material-icon-svg/dist/CachedIcon"
 import CheckIcon from "react-material-icon-svg/dist/CheckIcon"
 import CloseIcon from "react-material-icon-svg/dist/CloseIcon"
 import Column from "../../components/Column"
 import ContentCell from "../../components/ContentCell"
 import Participant from "../../components/Participant"
+import ParticipantActionBar from "../../containers/ParticipantActionBar"
 import PlayIcon from "react-material-icon-svg/dist/PlayIcon"
 import ProgressBar from "../../components/ProgressBar"
 import Result from "../../components/Result"
 import StopIcon from "react-material-icon-svg/dist/StopIcon"
 import gradients from "../../config/gradients"
-import range from "lodash/range"
 import relayEnvironment from "../../config/relay"
-import style from './style.styl'
-import uniqBy from "lodash/uniqBy"
-import { Component } from 'preact'
-import { LineStat } from "../../components/LineStat"
+import style from "./style.styl"
+import { Component } from "preact"
 import { connect } from "preact-redux"
-import { commitMutation } from "react-relay"
+import { commitMutation, graphql } from "react-relay"
+import PropTypes from "prop-types"
 
 
 
@@ -48,7 +42,7 @@ export class SpeedTest extends Component {
 
 
 
-	render({ participants }) {
+  render({ participants }) {
     const compareProgress = (participantA, participantB) => {
       const results = this.state.results
       const hasResultDiff = (participantA._id in results ? 1 : 0) - (participantB._id in results ? 1 : 0)
@@ -58,13 +52,13 @@ export class SpeedTest extends Component {
     }
 
 
-		return (
+    return (
       <div class={style["speed-test"]}>
 
         <Column>
           <ContentCell title="Participants" fill style={{ margin: "20px" }}>
-            { !this.props.participants.length && "Add participants using the buttons below" }
-            { this.props.participants.map((participant, a) => (
+            { !participants.length && "Add participants using the buttons below" }
+            { participants.map((participant, a) => (
               <Participant
                 key={a}
                 photoUrl={participant.photoUrl} 
@@ -89,26 +83,11 @@ export class SpeedTest extends Component {
 
             <ActionBarSpace fill>
               <ActionBarInput readonly value={Math.floor(this.state.time / 1000)}>Seconds</ActionBarInput>
-              <span style={{ fontFamily: '"DJB Friday Night Lights", monospace', fontSize: 32 }}>:</span>
+              <span style={{ fontFamily: "\"DJB Friday Night Lights\", monospace", fontSize: 32 }}>:</span>
               <ActionBarInput readonly value={(this.state.time % 1000).toString().padStart(3, "0")}>Milliseconds</ActionBarInput>
             </ActionBarSpace>
 
-            <ActionBarButton 
-              disabled={this.state.running}
-              icon={<AccountPlusIcon fill="white" />}
-              onClick={() => this.openOverlay("add-participant")} 
-            >
-              Add Participant
-            </ActionBarButton>
-
-            <ActionBarButton 
-              disabled={this.state.running}
-              icon={<AccountMultiplePlusIcon fill="white" />}
-              onClick={() => this.openOverlay("add-group")} 
-            >
-              Add Group 
-            </ActionBarButton>
-
+            <ParticipantActionBar disabled={this.state.running} />
           </ActionBar>
           <ProgressBar progress={this.state.time / this.state.duration} stages={21} />
         </Column>
@@ -116,7 +95,7 @@ export class SpeedTest extends Component {
         <Column width="360px">
           <div style={{ flex: "1 1 auto" }}>
             <ContentCell title="Leaderboard">
-              { [...this.props.participants].sort(compareProgress).map((participant, a) => {
+              { [...participants].sort(compareProgress).map((participant, a) => {
                 const time = participant._id in this.state.results ? this.state.results[participant._id] : 0
                 const label = time ? ((time / 1000).toFixed(3) + "s") : "not started"
                 const progress = time / this.state.duration 
@@ -144,29 +123,14 @@ export class SpeedTest extends Component {
             </ActionBar>
           ) }
         </Column>
-
-        { this.state.overlay == "add-participant" && <AddParticipantOverlay onClose={() => this.closeOverlays()} /> }
-        { this.state.overlay == "add-group" && <AddGroupOverlay onClose={() => this.closeOverlays()} /> }
       </div>
     )
-	}
+  }
 
 
 
   clearResults() {
     this.setState({ results: {}, saved: false })
-  }
-
-
-
-  closeOverlays() {
-    this.setState({ overlay: null })
-  }
-
-
-
-  openOverlay(overlay) {
-    this.setState({ overlay })
   }
 
 
@@ -231,6 +195,12 @@ export class SpeedTest extends Component {
   }
 
 }
+
+
+
+SpeedTest.propTypes = ({
+  participants: PropTypes.array.isRequired
+})
 
 
 

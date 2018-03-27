@@ -1,10 +1,8 @@
-import Column from "../../components/Column"
 import NavBar from "../../components/NavBar"
 import Profile from "../Profile"
-import moment from "moment"
 import style from "./style.styl"
-import { Component } from 'preact'
-import { graphql, createFragmentContainer } from 'react-relay'
+import { graphql, createFragmentContainer } from "react-relay"
+import PropTypes from "prop-types"
 
 
 
@@ -35,6 +33,18 @@ const container = createFragmentContainer(Sidebar,
     }
   `
 )
+
+
+
+Sidebar.propTypes = ({
+  profile: PropTypes.shape({
+    __typename: PropTypes.string.isRequired,
+    firstName: PropTypes.string.isRequired,
+    lastName: PropTypes.string.isRequired,
+    photoUrl: PropTypes.string,
+    position: PropTypes.string,
+  })
+})
 
 
 

@@ -11,13 +11,12 @@
     "lint": "eslint src",
     "test": "jest ./tests",
     "relay": "relay-compiler --src ./src --schema ./schema.graphql",
-    "relay:watch": "relay-compiler --src ./src --schema ./schema.graphql --watch"
+    "relay:watch": "relay-compiler --src ./src --schema ./schema.graphql --watch",
+    "backend:start": "start-tracker-backend",
+    "backend:stop": "stop-tracker-backend"
   },
   "eslintConfig": {
-    "extends": "eslint-config-synacor",
     "rules": {
-      "indent": ["error", 2],
-      "semi": [2, "never"] 
     }
   },
   "eslintIgnore": [

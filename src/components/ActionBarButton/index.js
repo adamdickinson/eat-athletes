@@ -1,4 +1,5 @@
 import style from "./style.styl"
+import PropTypes from "prop-types"
 
 
 
@@ -8,6 +9,16 @@ export const ActionBarButton = ({ children, disabled, icon, onClick, fill }) => 
     {children}
   </div>
 )
+
+
+
+ActionBarButton.propTypes = ({
+  children: PropTypes.node,
+  disabled: PropTypes.bool,
+  fill:     PropTypes.string,
+  icon:     PropTypes.node,
+  onClick:  PropTypes.func.isRequired
+})
 
 
 

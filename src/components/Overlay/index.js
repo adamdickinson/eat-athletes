@@ -1,4 +1,5 @@
 import style from "./style.styl"
+import PropTypes from "prop-types"
 
 
 
@@ -9,6 +10,12 @@ export const Overlay = ({ children }) => (
     </div>
   </div>
 )
+
+
+
+Overlay.propTypes = ({
+  children: PropTypes.node
+})
 
 
 

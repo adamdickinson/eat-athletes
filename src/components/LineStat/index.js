@@ -1,9 +1,10 @@
+/* eslint react/no-direct-mutation-state: "off" */
+
 import ProgressBar from "progressbar.js"
+import PropTypes from "prop-types"
 import isEqual from "lodash/isEqual"
-import render from "preact-render-to-string" 
-import { h, Component } from "preact"
-import isString from "lodash/isString"
 import style from "./style.styl"
+import { Component } from "preact"
 
 
 
@@ -34,7 +35,7 @@ export class LineStat extends Component {
 
     if( props.gradient ) {
       const { from, to } = props.gradient
-      this.state.shape.svg.insertAdjacentHTML('afterbegin', `
+      this.state.shape.svg.insertAdjacentHTML("afterbegin", `
         <defs>
           <linearGradient id="${gradientId}" x1="0%" y1="0%" x2="100%" y2="0%" gradientUnits="userSpaceOnUse">
             <stop offset="0%" stop-color="${from}"/>
@@ -75,15 +76,15 @@ export class LineStat extends Component {
 
 
 
-	componentWillReceiveProps(nextProps) {
-		if( !isEqual(this.props.options, nextProps.options) ) {
-			this._destroy()
-			this._create(nextProps, this.props)
-			return
-		}
+  componentWillReceiveProps(nextProps) {
+    if( !isEqual(this.props.options, nextProps.options) ) {
+      this._destroy()
+      this._create(nextProps, this.props)
+      return
+    }
 
-		this._animateProgress(nextProps.progress)
-	}
+    this._animateProgress(nextProps.progress)
+  }
 
 
 
@@ -93,8 +94,8 @@ export class LineStat extends Component {
 
 
 
-	render(props) {
-		const { change, color, containerStyle, gradient, label, value } = props
+  render(props) {
+    const { change, containerStyle, gradient, label, value } = props
     return (
       <div class={style["line-stat"]}>
         <div class={style.info}>
@@ -104,9 +105,20 @@ export class LineStat extends Component {
         <div class={style["progressbar-container"]} style={containerStyle} ref={ref => this.container = ref} />
       </div>
     )
-	}
+  }
 
 }
+
+
+
+LineStat.propTypes = ({
+  gradient:   PropTypes.shape({
+    from:       PropTypes.string.isRequired,
+    to:         PropTypes.string.isRequired,
+  }),
+  options:    PropTypes.object,
+  progress:   PropTypes.float,
+})
 
 
 

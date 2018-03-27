@@ -1,3 +1,4 @@
+import PropTypes from "prop-types"
 import style from "./style.styl"
 
 
@@ -7,6 +8,13 @@ export const ActionBarSpace = ({ children, fill }) => (
     {children}
   </div>
 )
+
+
+
+ActionBarSpace.propTypes = ({
+  children: PropTypes.node,
+  fill:     PropTypes.string
+})
 
 
 

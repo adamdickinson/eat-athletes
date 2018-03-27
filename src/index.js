@@ -1,5 +1,5 @@
-import './style/index.styl'
-import App from './components/App'
+import "./style/index.styl"
+import App from "./components/App"
 
 
 

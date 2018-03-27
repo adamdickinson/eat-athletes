@@ -1,9 +1,11 @@
+/* eslint react/no-direct-mutation-state: "off" */
+
 import ProgressBar from "progressbar.js"
+import PropTypes from "prop-types"
 import isEqual from "lodash/isEqual"
 import render from "preact-render-to-string" 
-import { h, Component } from "preact"
-import isString from "lodash/isString"
 import style from "./style.styl"
+import { Component } from "preact"
 
 
 
@@ -26,7 +28,7 @@ export class CircleStat extends Component {
 
     if( props.gradient ) {
       const { from, to } = props.gradient
-      this.state.shape.svg.insertAdjacentHTML('afterbegin', `
+      this.state.shape.svg.insertAdjacentHTML("afterbegin", `
         <defs>
           <linearGradient id="${gradientId}" x1="0%" y1="0%" x2="100%" y2="0%" gradientUnits="userSpaceOnUse">
             <stop offset="0%" stop-color="${from}"/>
@@ -71,8 +73,8 @@ export class CircleStat extends Component {
       }
 
       const text = [
-        <span style={{ fontSize: "36px", textAlign: "center", display: "block" }}>{result}</span>,
-        <span style={{ 
+        <span key="result" style={{ fontSize: "36px", textAlign: "center", display: "block" }}>{result}</span>,
+        <span key="label" style={{ 
           textAlign: "center", 
           display: "block",
           fontSize: "13px",
@@ -81,7 +83,7 @@ export class CircleStat extends Component {
           "-webkit-text-fill-color": "transparent",
           fontWeight: "bold"
         }}>{label}</span>,
-        <span style={{ color: typeColors[type], fontSize: "18px", marginTop: "8px", textAlign: "center", display: "block" }}>{change}</span>
+        <span key="change" style={{ color: typeColors[type], fontSize: "18px", marginTop: "8px", textAlign: "center", display: "block" }}>{change}</span>
       ].map(render).join("\n")
 
       this.state.shape.setText(text)
@@ -96,16 +98,16 @@ export class CircleStat extends Component {
 
 
 
-	componentWillReceiveProps(nextProps) {
-		if( !isEqual(this.props.options, nextProps.options) ) {
-			this._destroy()
-			this._create(nextProps, this.props)
-			return
-		}
+  componentWillReceiveProps(nextProps) {
+    if( !isEqual(this.props.options, nextProps.options) ) {
+      this._destroy()
+      this._create(nextProps, this.props)
+      return
+    }
 
-		this._animateProgress(nextProps.progress)
+    this._animateProgress(nextProps.progress)
     this._setText(nextProps.result, nextProps.label, nextProps.change, nextProps.changeType, nextProps.gradient)
-	}
+  }
 
 
 
@@ -115,12 +117,28 @@ export class CircleStat extends Component {
 
 
 
-	render(props) {
-		const { containerStyle } = props
+  render(props) {
+    const { containerStyle } = props
     return <div class={style["progressbar-container"]} style={containerStyle} ref={ref => this.container = ref} />
-	}
+  }
 
 }
+
+
+
+CircleStat.propTypes = ({
+  containerStyle: PropTypes.object,
+  change:     PropTypes.string,
+  changeType: PropTypes.string,
+  gradient:   PropTypes.shape({
+    from:       PropTypes.string.isRequired,
+    to:         PropTypes.string.isRequired,
+  }),
+  label:      PropTypes.string,
+  options:    PropTypes.object,
+  progress:   PropTypes.float,
+  result:     PropTypes.string,
+})
 
 
 
