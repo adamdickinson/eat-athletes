@@ -13,18 +13,29 @@ const downloadSpreadsheet = async spreadsheet => {
 
 
 const fields = {
-  standingVerticalLeap: { label: "Standing Vertical Leap",     width: 25 },
-  maxVerticalLeap:      { label: "Max Vertical Leap",          width: 20 },
-  agility:              { label: "Lane Agility Time (sec)",    width: 25 },
-  speed:                { label: "Three Quarter Sprint (sec)", width: 30 },
-  height:               { label: "Height w/o Shoes",           width: 20 },
-  heightWithShoes:      { label: "Height w/ Shoes",            width: 20 },
-  weight:               { label: "Weight",                     width: 10 },
-  wingspan:             { label: "Wingspan",                   width: 15 },
-  standingReach:        { label: "Standing Reach",             width: 20 },
-  bodyFat:              { label: "Body Fat",                   width: 15, format: value => value !== null ? `${value}%` : '-' },
-  handLength:           { label: "Hand Length",                width: 15 },
-  handWidth:            { label: "Hand Width",                 width: 15 },
+  standingVerticalLeap:       { label: "Standing Vertical Leap",     width: 25 },
+  maxVerticalLeap:            { label: "Max Vertical Leap",          width: 20 },
+  agility:                    { label: "Lane Agility Time (sec)",    width: 25 },
+  speed:                      { label: "Three Quarter Sprint (sec)", width: 30 },
+  beep:                       { label: "Beep Test",                  width: 15 },
+  laneAgility:                { label: "Lane Agility (sec)",         width: 20 },
+  shooting45Degree:           { label: "45 Degree Shooting",         width: 20 }, 
+  shootingBaseLine:           { label: "Base Line Shooting",         width: 20 }, 
+  shootingElbow:              { label: "Elbow Shooting",             width: 20 }, 
+  shootingFreeThrow:          { label: "Free Throw Shooting",        width: 25 }, 
+  shootingThreePointBaseline: { label: "3pt Base Line Shooting",     width: 25 }, 
+  shootingThreePointWing:     { label: "3pt Wing Shooting",          width: 20 }, 
+  timeTrial2km:               { label: "2km Time Trial (sec)",       width: 25 },
+  timeTrial3km:               { label: "3km Time Trial (sec)",       width: 25 },
+  timeTrial5km:               { label: "5km Time Trial (sec)",       width: 25 },
+  height:                     { label: "Height w/o Shoes",           width: 20 },
+  heightWithShoes:            { label: "Height w/ Shoes",            width: 20 },
+  weight:                     { label: "Weight",                     width: 10 },
+  wingspan:                   { label: "Wingspan",                   width: 15 },
+  standingReach:              { label: "Standing Reach",             width: 20 },
+  bodyFat:                    { label: "Body Fat",                   width: 15, format: value => value !== null ? `${value}%` : '-' },
+  handLength:                 { label: "Hand Length",                width: 15 },
+  handWidth:                  { label: "Hand Width",                 width: 15 },
 }
 
 
@@ -82,8 +93,8 @@ const generateReportSpreadsheet = async athletes => {
   }
 
 
-  generateSheet(athleticism, Object.keys(fields).slice(0, 4))
-  generateSheet(measurements, Object.keys(fields).slice(4))
+  generateSheet(athleticism, Object.keys(fields).slice(0, 15))
+  generateSheet(measurements, Object.keys(fields).slice(15))
 
   return spreadsheet
 }

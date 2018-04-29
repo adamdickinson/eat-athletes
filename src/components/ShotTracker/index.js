@@ -13,6 +13,7 @@ export class ShotTracker extends Component {
     const shotActive = this.state.shotTime !== undefined 
     return (
       <div 
+        ref={ref => { this.wrap = ref }}
         class={style["shot-tracker"]} 
       >
         { !shotActive && (
@@ -20,9 +21,9 @@ export class ShotTracker extends Component {
             <button 
               disabled={disabled}
               class={style.button}
-              style={{ backgroundImage: "linear-gradient(to right, #4DD0E1, #00B0FF)" }}
+              style={{ touchAction: "none", backgroundImage: "linear-gradient(to right, #4DD0E1, #00B0FF)" }}
               onMouseDown={() => this.shotTaken()} 
-              onTouchDown={() => this.shotTaken()}
+              onTouchStart={() => this.shotTaken()}
             >
               <PlusIcon />
               Shot attempted
@@ -34,9 +35,9 @@ export class ShotTracker extends Component {
           <div class={style.wrap}>
             <button 
               class={style.button}
-              style={{ backgroundImage: "linear-gradient(to right, #E14C86, #FE0334)" }}
+              style={{ touchAction: "none", backgroundImage: "linear-gradient(to right, #E14C86, #FE0334)" }}
               onMouseUp={() => this.shotMissed()} 
-              onTouchUp={() => this.shotMissed()}
+              onTouchEnd={this.onTouchEnd.bind(this)}
             >
               <CloseIcon />
               Shot missed
@@ -44,9 +45,9 @@ export class ShotTracker extends Component {
 
             <button 
               class={style.button}
-              style={{ backgroundImage: "linear-gradient(to right, #00AB9D, #2AA167)" }}
+              style={{ touchAction: "none", backgroundImage: "linear-gradient(to right, #00AB9D, #2AA167)" }}
               onMouseUp={() => this.shotMade()} 
-              onTouchUp={() => this.shotMade()}
+              onTouchEnd={this.onTouchEnd.bind(this)}
             >
               <CheckIcon />
               Shot made
@@ -55,6 +56,17 @@ export class ShotTracker extends Component {
         ) }
       </div>
     )
+  }
+
+
+
+  onTouchEnd(event) {
+    event.preventDefault()
+    const liftoffX = event.changedTouches[0].clientX
+    const midX = this.wrap.offsetLeft + 0.5 * this.wrap.offsetWidth
+
+    if( liftoffX > midX ) this.shotMade()
+    else this.shotMissed()
   }
 
 

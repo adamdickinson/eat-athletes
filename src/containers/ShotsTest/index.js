@@ -197,6 +197,14 @@ export class ShotsTest extends Component {
 
 
 
+  removeShot(index) {
+    const shots = [...this.state.shots]
+    shots.splice(index, 1)
+    this.setState({ shots })
+  }
+
+
+
   selectParticipant(participant) {
     this.setState({ participant, shots: [] })
     this.state.timer.stop()
